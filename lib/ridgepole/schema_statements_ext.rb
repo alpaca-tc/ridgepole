@@ -6,12 +6,14 @@ module Ridgepole
       if Ridgepole::ExecuteExpander.noop
         caller_methods = caller.map {|i| i =~ /:\d+:in `(.+)'/ ? $1 : '' }
         if caller_methods.any? {|i| i =~ /\Aremove_index/ }
-          true
+          return true
         elsif caller_methods.any? {|i| i =~ /\Aadd_index/ }
-          false
-        else
-          super
+          return false
         end
+      end
+
+      if ActiveRecord.gem_version >= Gem::Version.new('5.1.0')
+        super(table_name, column_name)
       else
         super
       end
