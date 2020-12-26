@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (add comment)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
           t.string  "string", null: false
@@ -15,7 +15,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (delete comment)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
@@ -50,7 +50,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
           t.string  "string", null: false
@@ -74,7 +74,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (change comment)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
@@ -85,7 +85,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"
@@ -109,7 +109,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (no change comment)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
@@ -133,7 +133,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create table (with comment)' do
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade, comment: "table comment") %> do |t|
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"
@@ -156,7 +156,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop table (with comment)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
+        create_table "employee_clubs", <%= i table_options(charset: "utf8", force: :cascade, comment: "table comment") %> do |t|
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"

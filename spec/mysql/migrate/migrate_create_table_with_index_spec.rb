@@ -6,7 +6,7 @@ describe 'Ridgepole::Client#diff -> migrate (with index)' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", primary_key: ["emp_no", "dept_no"], force: :cascade do |t|
+        create_table "dept_emp", primary_key: ["emp_no", "dept_no"], charset: "utf8", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", null: false
           t.date    "from_date", null: false
@@ -25,7 +25,7 @@ describe 'Ridgepole::Client#diff -> migrate (with index)' do
       expect(delta.differ?).to be_truthy
 
       expect(delta.script).to match_fuzzy erbh(<<-ERB)
-        create_table("dept_emp", **{:primary_key=>["emp_no", "dept_no"]}) do |t|
+        create_table("dept_emp", **{:primary_key=>["emp_no", "dept_no"], <%= i cond(">= 6.1", ':charset=>"utf8"') %>}) do |t|
           t.column("emp_no", :"integer", **{:null=>false, :limit=>4})
           t.column("dept_no", :"string", **{:null=>false, :limit=>255})
           t.column("from_date", :"date", **{:null=>false})
