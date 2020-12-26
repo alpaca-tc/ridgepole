@@ -23,7 +23,11 @@ module Ridgepole
       end
 
       def adapter
-        ActiveRecord::Base.connection_config.fetch(:adapter).to_sym
+        if ActiveRecord.gem_version >= Gem::Version.create('6.1.0')
+          ActiveRecord::Base.connection_db_config.configuration_hash.fetch(:adapter).to_sym
+        else
+          ActiveRecord::Base.connection_config.fetch(:adapter).to_sym
+        end
       rescue ActiveRecord::ConnectionNotEstablished
         nil
       end
