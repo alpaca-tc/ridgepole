@@ -114,9 +114,6 @@ module Ridgepole
 
       normalize_default_proc_options!(from, to)
 
-      from_options = from[:options] || {}
-      to_options = to[:options] || {}
-
       if @options[:ignore_table_comment]
         from.delete(:comment)
         to.delete(:comment)
@@ -127,10 +124,18 @@ module Ridgepole
       end
 
       if Ridgepole::ConnectionAdapters.mysql?
-        if @options[:mysql_change_table_options] && (from_options != to_options)
+        if @options[:mysql_change_table_options]
+          from_options, from_charset, from_collation = convert_to_table_options_attrs(from[:options], from[:charset], from[:collation])
+          to_options, to_charset, to_collation = convert_to_table_options_attrs(to[:options], to[:charset], to[:collation])
+
           from.delete(:options)
+          from.delete(:charset)
+          from.delete(:charset)
           to.delete(:options)
+
           table_delta[:table_options] = to_options
+          table_delta[:table_charset] = to_charset
+          table_delta[:table_collation] = to_collation
         end
 
         if @options[:mysql_change_table_comment] && (from[:comment] != to[:comment])
@@ -174,6 +179,9 @@ module Ridgepole
     to: #{to}
       MSG
       end
+    end
+
+    def convert_to_table_options_attrs(table_options)
     end
 
     def convert_to_primary_key_attrs(column_options)
