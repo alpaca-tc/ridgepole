@@ -3,8 +3,8 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with tables option (same)' do
     let(:current_schema) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
@@ -12,7 +12,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", id: false, force: :cascade do |t|
+        create_table "salaries", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
@@ -20,12 +20,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      RUBY
+      ERB
     end
 
     let(:dsl) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
@@ -33,7 +33,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", id: false, force: :cascade do |t|
+        create_table "salaries", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
@@ -41,19 +41,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      ERB
     end
 
     let(:expected_dsl) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      RUBY
+      ERB
     end
 
     before { subject.diff(current_schema).migrate }
@@ -70,8 +70,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when with tables option (differ)' do
     let(:current_schema) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
@@ -79,7 +79,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", id: false, force: :cascade do |t|
+        create_table "salaries", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
@@ -87,12 +87,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      RUBY
+      ERB
     end
 
     let(:dsl) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
           t.string "last_name", limit: 16, null: false
@@ -100,7 +100,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", id: false, force: :cascade do |t|
+        create_table "salaries", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
@@ -108,31 +108,31 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      ERB
     end
 
     let(:before_dsl) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      RUBY
+      ERB
     end
 
     let(:after_dsl) do
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      RUBY
+      ERB
     end
 
     before { subject.diff(current_schema).migrate }

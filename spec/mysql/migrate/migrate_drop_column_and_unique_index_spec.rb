@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop column and unique index' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
           t.index ["first_name", "last_name"], name: "first_name_last_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -14,7 +14,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
           t.string "first_name", limit: 14, null: false
         end
       ERB
