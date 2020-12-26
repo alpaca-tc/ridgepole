@@ -124,18 +124,18 @@ module Ridgepole
       end
 
       if Ridgepole::ConnectionAdapters.mysql?
-        if @options[:mysql_change_table_options]
-          from_options, from_charset, from_collation = convert_to_table_options_attrs(from[:options], from[:charset], from[:collation])
-          to_options, to_charset, to_collation = convert_to_table_options_attrs(to[:options], to[:charset], to[:collation])
+        from_options = convert_to_table_options_attrs(from[:options], from[:charset], from[:collation])
+        to_options = convert_to_table_options_attrs(to[:options], to[:charset], to[:collation])
 
+        if @options[:mysql_change_table_options] && (from_options != to_options)
           from.delete(:options)
           from.delete(:charset)
-          from.delete(:charset)
+          from.delete(:collation)
           to.delete(:options)
+          to.delete(:charset)
+          to.delete(:collation)
 
           table_delta[:table_options] = to_options
-          table_delta[:table_charset] = to_charset
-          table_delta[:table_collation] = to_collation
         end
 
         if @options[:mysql_change_table_comment] && (from[:comment] != to[:comment])
@@ -147,7 +147,11 @@ module Ridgepole
 
       if @options[:dump_without_table_options]
         from.delete(:options)
+        from.delete(:charset)
+        from.delete(:collation)
         to.delete(:options)
+        to.delete(:charset)
+        to.delete(:collation)
       end
 
       pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
@@ -181,7 +185,22 @@ module Ridgepole
       end
     end
 
-    def convert_to_table_options_attrs(table_options)
+    def convert_to_table_options_attrs(raw_table_options, table_charset, table_collation)
+      if raw_table_options.blank? && ActiveRecord.gem_version >= Gem::Version.create('6.1.0')
+        # Default engine is InnoDB in 6.1.0
+        # related: https://github.com/rails/rails/pull/39365/files#diff-868f1dccfcbed26a288bf9f3fd8a39c863a4413ab0075e12b6805d9798f556d1R441
+        raw_table_options = "ENGINE=InnoDB".dup
+      end
+
+      if / DEFAULT CHARSET=(?<charset>\w+)(?: COLLATE=(?<collation>\w+))?/ =~ raw_table_options
+        raw_table_options = $` + $' # before part + after part
+        table_charset ||= charset
+        table_collation ||= collation if collation
+      end
+
+      raw_table_options << " DEFAULT CHARSET=#{table_charset}" if table_charset
+      raw_table_options << " COLLATE=#{table_collation}" if table_collation
+      raw_table_options
     end
 
     def convert_to_primary_key_attrs(column_options)

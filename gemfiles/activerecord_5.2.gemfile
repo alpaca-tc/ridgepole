@@ -2,6 +2,10 @@
 
 source "https://rubygems.org"
 
+gem "pry"
+gem "guard"
+gem "guard-shell"
+gem "hash_modern_inspect", path: "/Users/ishii.hiroyuki/projects/winebarrel/hash_modern_inspect"
 gem "activerecord", "~> 5.2.0"
 gem "mysql2", "~> 0.4.4"
 

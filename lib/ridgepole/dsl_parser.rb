@@ -32,6 +32,7 @@ module Ridgepole
 
     def check_foreign_key_without_index(table_name, attrs)
       return unless attrs[:foreign_keys]
+      # TODO: 恐らくデフォルト値がInnoDBになったので、何らかの対応が必要
       return unless attrs[:options][:options]&.include?('ENGINE=InnoDB')
 
       attrs[:foreign_keys].each do |_, foreign_key_attrs|

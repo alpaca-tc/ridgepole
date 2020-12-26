@@ -16,6 +16,8 @@ module Ridgepole
         def table_options(table_name)
           options = super
           options.delete(:options) if options && @__without_table_options
+          options.delete(:charset) if options && @__without_table_options
+          options.delete(:collation) if options && @__without_table_options
           options
         end
       end
