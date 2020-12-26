@@ -3,14 +3,14 @@
 describe 'Ridgepole::Client (with integer pk)', condition: '>= 5.1.0' do
   context 'when with id:integer' do
     let(:dsl) do
-      <<-RUBY
-        create_table "books", id: :integer, force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "books", <%= i table_options(id: :integer, charset: 'utf8', force: :cascade) %> do |t|
           t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
-      RUBY
+      ERB
     end
 
     subject { client }
@@ -25,14 +25,14 @@ describe 'Ridgepole::Client (with integer pk)', condition: '>= 5.1.0' do
 
   context 'when without id:integer' do
     let(:dsl) do
-      <<-RUBY
-        create_table "books", force: :cascade do |t|
+      erbh(<<-ERB)
+        create_table "books", <%= i table_options(charset: 'utf8', force: :cascade) %> do |t|
           t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
-      RUBY
+      ERB
     end
 
     subject { client }

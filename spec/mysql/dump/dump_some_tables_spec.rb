@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "employees", primary_key: "emp_no", id: :integer, <%= i cond('>= 5.1', default: nil) %>, force: :cascade do |t|
+        create_table "employees", <%= i table_options(primary_key: "emp_no", id: :integer, default: nil, charset: 'utf8', force: :cascade) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
@@ -19,7 +19,7 @@ describe 'Ridgepole::Client#dump' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", primary_key: ["emp_no", "from_date"], force: :cascade do |t|
+        create_table "salaries", <%= i table_options(primary_key: ["emp_no", "from_date"], charset: 'utf8', force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "employees", primary_key: "emp_no", id: :integer, <%= i cond('>= 5.1', default: nil) %>, force: :cascade do |t|
+        create_table "employees", <%= i table_options(primary_key: "emp_no", id: :integer, default: nil, charset: 'utf8') %>, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
@@ -57,7 +57,7 @@ describe 'Ridgepole::Client#dump' do
           t.date   "hire_date", null: false
         end
 
-        create_table "salaries", primary_key: ["emp_no", "from_date"], force: :cascade do |t|
+        create_table "salaries", <%= i table_options(primary_key: ["emp_no", "from_date"], charset: 'utf8', force: :cascade) %> do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
