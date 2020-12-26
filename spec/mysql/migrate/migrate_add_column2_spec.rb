@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (int/noop) (1)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (int/noop) (2)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -82,7 +82,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (int/noop) (3)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -121,7 +121,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (bigint/noop)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.bigint "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false

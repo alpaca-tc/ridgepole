@@ -3,7 +3,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) do
     erbh(<<-ERB)
-      create_table "employees", id: :integer, unsigned: true, force: :cascade do |t|
+      create_table "employees", <%= i cond(">= 6.1", id: { type: :integer, unsigned: true }) %>, <%= i cond("< 6.1", id: :integer, unsigned: true) %>, force: :cascade do |t|
       end
     ERB
   end
@@ -22,12 +22,24 @@ describe 'Ridgepole::Client#diff -> migrate' do
         ERB
       end
 
-      it {
-        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
+      let(:warning_message) do
+        if condition('>= 6.1')
+        <<-MSG
+[WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
+  from: {:id=>{:type=>:integer, :unsigned=>true}}
+    to: {:id=>:bigint, :unsigned=>true}
+        MSG
+        else
+        <<-MSG
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
   from: {:id=>:integer, :unsigned=>true}
     to: {:id=>:bigint, :unsigned=>true}
         MSG
+        end
+      end
+
+      it {
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(warning_message)
 
         delta = subject.diff(expected_dsl)
         expect(delta.differ?).to be_falsey
@@ -58,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:allow_pk_change) { true }
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+        create_table "employees", <%= i cond(">= 6.1", id: { type: :bigint, unsigned: true }) %>, <%= i cond("< 6.1", id: :bigint, unsigned: true) %>, force: :cascade do |t|
         end
 
         create_table "salaries", force: :cascade do |t|

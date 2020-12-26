@@ -44,11 +44,11 @@ ERBh.define_method(:table_options) do |*args, **original_options|
     charset = options.delete(:charset)
     collation = options.delete(:collation)
 
-    table_options = "#{options[:options]}".dup
+    table_options = options[:options] if options[:options]
     table_options << " DEFAULT CHARSET=#{charset}" if charset
     table_options << " COLLATE=#{collation}" if collation
 
-    options[:options] = table_options
+    options[:options] = table_options if table_options
   }
 
   if condition('>= 6.1')

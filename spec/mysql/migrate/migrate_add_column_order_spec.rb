@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column to first' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -15,7 +15,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", force: :cascade do |t|
           t.integer "emp_no0", null: false
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
@@ -52,7 +52,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column to first (no id)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -63,7 +63,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(id: false, charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no0", null: false
           t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
@@ -98,7 +98,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column to first (with pk)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
@@ -108,7 +108,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
           t.integer "emp_no0", null: false
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -143,7 +143,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column to first (with multiple pk)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: ["emp_no1", "emp_no2"], charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
           t.string  "dept_no", limit: 4, null: false
@@ -155,7 +155,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: ["emp_no1", "emp_no2"], charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
           t.integer "emp_no0", null: false
@@ -193,7 +193,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column to first (with multiple pk2)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: ["emp_no1", "emp_no2"], charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
           t.string  "dept_no", limit: 4, null: false
@@ -205,7 +205,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "dept_emp", <%= i table_options(primary_key: ["emp_no1", "emp_no2"], charset: "utf8", force: :cascade) %> do |t|
+        create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no0", null: false
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false

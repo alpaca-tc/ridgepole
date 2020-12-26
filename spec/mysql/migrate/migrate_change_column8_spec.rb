@@ -25,6 +25,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:table_options) { 'ENGINE=InnoDB DEFAULT CHARSET=utf8' }
 
     it {
+
       expect(Ridgepole::Logger.instance).to_not receive(:warn).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey

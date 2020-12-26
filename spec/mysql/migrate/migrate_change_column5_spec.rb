@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary: blob -> varbinary)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -19,7 +19,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -47,7 +47,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary: varbinary -> blob)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -62,7 +62,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -90,7 +90,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary without limit)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -104,8 +104,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:expected_dsl) do
-      erbh(<<-ERB)
-        create_table "employees", <%= i table_options(primary_key: "emp_no", charset: "utf8", force: :cascade) %> do |t|
+      <<-RUBY
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
@@ -115,7 +115,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name"
         end
-      ERB
+      RUBY
     end
 
     before { subject.diff(actual_dsl).migrate }

@@ -4,10 +4,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
@@ -18,12 +18,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:sorted_actual_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
@@ -32,12 +32,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -60,10 +60,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk without name' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
@@ -74,12 +74,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:sorted_actual_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", on_delete: :cascade
@@ -88,12 +88,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent"
@@ -116,12 +116,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop/add fk with parent table' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -130,12 +130,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent2_id"
           t.index ["parent2_id"], name: "par2_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent2", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent2", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent2", name: "child_ibfk_2"
@@ -157,12 +157,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop/add fk with parent table without name' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent"
@@ -171,12 +171,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "child", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "child", force: :cascade do |t|
           t.integer "parent2_id"
           t.index ["parent2_id"], name: "par2_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent2", <%= i table_options(id: :integer, charset: "utf8", force: :cascade) %> do |t|
+        create_table "parent2", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent2"

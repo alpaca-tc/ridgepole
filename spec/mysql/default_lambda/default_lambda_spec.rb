@@ -5,30 +5,30 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     it do
-      delta = subject.diff(erbh(<<-ERB))
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      expect(subject.dump).to match_fuzzy <<-RUBY
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
     end
   end
 
   context 'when there is no difference' do
     let(:dsl) do
-      erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      <<-RUBY
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
     end
 
     subject { client }
@@ -47,25 +47,25 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(erbh(<<-ERB)).migrate
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      subject.diff(<<-RUBY).migrate
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
     end
 
     it do
-      delta = subject.diff(erbh(<<-ERB))
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { '"1970-01-01 00:00:00"' }, null: false
         end
-      ERB
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
       expect(subject.dump).to match_ruby erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: "1970-01-01 00:00:00", null: false
         end
       ERB
@@ -76,28 +76,28 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(erbh(<<-ERB)).migrate
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      subject.diff(<<-RUBY).migrate
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: '1970-01-01 00:00:00', null: false
         end
-      ERB
+      RUBY
     end
 
     it do
-      delta = subject.diff(erbh(<<-ERB))
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      expect(subject.dump).to match_fuzzy <<-RUBY
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      ERB
+      RUBY
     end
   end
 
@@ -105,30 +105,30 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(erbh(<<-ERB)).migrate
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      subject.diff(<<-RUBY).migrate
+        create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      ERB
+      RUBY
     end
 
     it do
-      delta = subject.diff(erbh(<<-ERB))
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      ERB
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      expect(subject.dump).to match_fuzzy <<-RUBY
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      ERB
+      RUBY
     end
   end
 
@@ -136,29 +136,29 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(erbh(<<-ERB)).migrate
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      subject.diff(<<-RUBY).migrate
+        create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      ERB
+      RUBY
     end
 
     it do
-      delta = subject.diff(erbh(<<-ERB))
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      ERB
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "foos", <%= i table_options(charset: "utf8", force: :cascade) %> do |t|
+      expect(subject.dump).to match_fuzzy <<-RUBY
+        create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      ERB
+      RUBY
     end
   end
 end
